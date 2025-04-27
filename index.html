@@ -1,0 +1,68 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./src/assets/profile2.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sakshi Kumari</title>
+
+    <style>
+      .splash {
+        display: none;
+        position: fixed;
+        top: 0; 
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        color: white;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 3em;
+        animation: pop 2s ease-out;
+        z-index: 9999;
+      }
+
+      .splash.show {
+        display: flex;
+      }
+
+      @keyframes pop {
+        0% { transform: scale(0); opacity: 0; }
+        50% { transform: scale(1.2); opacity: 1; }
+        100% { transform: scale(1); }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="birthdaySplash" class="splash">
+      🎉 Happy Birthday Sakshi 🎉
+    </div>
+
+    <div id="root"></div>
+
+    <script type="module" src="/src/main.jsx"></script>
+
+    <script>
+      function showBirthdaySplash() {
+        const today = new Date();
+        const day = today.getDate();
+        const month = today.getMonth(); // January = 0, April = 3
+
+        if (day === 28 && month === 3) { // 3 = April
+          const splash = document.getElementById('birthdaySplash');
+          splash.classList.add('show');
+
+          setTimeout(() => {
+            splash.classList.remove('show');
+          }, 5000); // Hide after 5 seconds
+        }
+      }
+
+      window.onload = showBirthdaySplash;
+    </script>
+  </body>
+</html>
+
