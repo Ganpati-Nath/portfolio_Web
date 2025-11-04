@@ -46,23 +46,36 @@
     <script type="module" src="/src/main.jsx"></script>
 
     <script>
-      function showBirthdaySplash() {
-        const today = new Date();
-        const day = today.getDate();
-        const month = today.getMonth(); // January = 0, April = 3
+  function showBirthdaySplash() {
+    const today = new Date();
+    const day = today.getDate();
+    const month = today.getMonth(); // January = 0, November = 10
 
-        if (day === 4 && month === 10) { // 3 = April
-          const splash = document.getElementById('birthdaySplash');
-          splash.classList.add('show');
+    if (day === 4 && month === 10) { // November 4
+      const splash = document.getElementById('birthdaySplash');
+      splash.classList.add('show');
 
-          setTimeout(() => {
-            splash.classList.remove('show');
-          }, 5000); // Hide after 5 seconds
-        }
-      }
+      // Create an audio element and play the birthday song
+      const audio = new Audio('./src/assets/work_logo/happy-birthday.mp3');
+      audio.play().catch(err => {
+        console.log('Autoplay blocked. Waiting for user interaction...', err);
+        // If autoplay is blocked, wait for first click/tap
+        document.body.addEventListener('click', () => {
+          audio.play();
+        }, { once: true });
+      });
 
-      window.onload = showBirthdaySplash;
-    </script>
+      // Hide splash after 5 seconds
+      setTimeout(() => {
+        splash.classList.remove('show');
+        audio.pause();
+      }, 5000);
+    }
+  }
+
+  window.onload = showBirthdaySplash;
+</script>
+
   </body>
 </html>
 
