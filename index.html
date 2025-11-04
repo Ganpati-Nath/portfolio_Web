@@ -6,39 +6,90 @@
     <title>PRATEEK PANDEY</title>
 
     <style>
+      @keyframes gradientFlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      @keyframes fadeIn {
+        0% { opacity: 0; transform: scale(0.8); }
+        50% { opacity: 1; transform: scale(1.05); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+
+      @keyframes fadeOut {
+        0% { opacity: 1; transform: scale(1); }
+        100% { opacity: 0; transform: scale(0.8); }
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: #000;
+      }
+
       .splash {
         display: none;
         position: fixed;
-        top: 0; 
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        inset: 0;
+        background: linear-gradient(-45deg, #ff6ec4, #7873f5, #6efacc, #f6d365);
+        background-size: 400% 400%;
+        animation: gradientFlow 6s ease infinite;
         color: white;
+        font-family: 'Poppins', sans-serif;
+        font-weight: bold;
         text-align: center;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        font-size: 3em;
-        animation: pop 2s ease-out;
         z-index: 9999;
+        transition: opacity 1s ease-in-out;
       }
 
       .splash.show {
         display: flex;
+        animation: fadeIn 1.2s ease-out forwards;
       }
 
-      @keyframes pop {
-        0% { transform: scale(0); opacity: 0; }
-        50% { transform: scale(1.2); opacity: 1; }
-        100% { transform: scale(1); }
+      .splash.hide {
+        animation: fadeOut 1s ease-out forwards;
+      }
+
+      .splash h1 {
+        font-size: 4em;
+        text-shadow: 0 0 20px #fff, 0 0 40px #ff99ff, 0 0 80px #ff99ff;
+        margin-bottom: 10px;
+      }
+
+      .splash p {
+        font-size: 1.5em;
+        color: #fff;
+        text-shadow: 0 0 10px #fff;
+      }
+
+      /* Simple confetti dots */
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: fall 4s linear infinite;
+      }
+
+      @keyframes fall {
+        0% { transform: translateY(-10vh); opacity: 1; }
+        100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
       }
     </style>
   </head>
 
   <body>
     <div id="birthdaySplash" class="splash">
-      🎉 Happy Birthday PRATEEK 🎉
+      <h1>🎉 Happy Birthday PRATEEK 🎉</h1>
+      <p>Wishing you an amazing day filled with joy, music & celebration!</p>
     </div>
 
     <div id="root"></div>
@@ -46,36 +97,55 @@
     <script type="module" src="/src/main.jsx"></script>
 
     <script>
-  function showBirthdaySplash() {
-    const today = new Date();
-    const day = today.getDate();
-    const month = today.getMonth(); // January = 0, November = 10
+      function createConfetti() {
+        const splash = document.getElementById('birthdaySplash');
+        for (let i = 0; i < 40; i++) {
+          const confetti = document.createElement('div');
+          confetti.classList.add('confetti');
+          confetti.style.background = `hsl(${Math.random() * 360}, 80%, 60%)`;
+          confetti.style.left = Math.random() * 100 + 'vw';
+          confetti.style.animationDelay = Math.random() * 3 + 's';
+          confetti.style.animationDuration = 3 + Math.random() * 2 + 's';
+          splash.appendChild(confetti);
+        }
+      }
 
-    if (day === 4 && month === 10) { // November 4
-      const splash = document.getElementById('birthdaySplash');
-      splash.classList.add('show');
+      function showBirthdaySplash() {
+        const today = new Date();
+        const day = today.getDate();
+        const month = today.getMonth(); // January = 0, November = 10
 
-      // Create an audio element and play the birthday song
-      const audio = new Audio('./src/assets/work_logo/happy-birthday.mp3');
-      audio.play().catch(err => {
-        console.log('Autoplay blocked. Waiting for user interaction...', err);
-        // If autoplay is blocked, wait for first click/tap
-        document.body.addEventListener('click', () => {
-          audio.play();
-        }, { once: true });
-      });
+        if (day === 4 && month === 10) {
+          const splash = document.getElementById('birthdaySplash');
+          splash.classList.add('show');
+          createConfetti();
 
-      // Hide splash after 5 seconds
-      setTimeout(() => {
-        splash.classList.remove('show');
-        audio.pause();
-      }, 5000);
-    }
-  }
+          // Load and autoplay song
+          const audio = new Audio('/happy-birthday.mp3');
+          audio.volume = 0.8;
 
-  window.onload = showBirthdaySplash;
-</script>
+          // Try to autoplay directly
+          audio.play().catch(() => {
+            // If autoplay blocked, use a hidden button trick
+            const unlock = () => {
+              audio.play();
+              document.removeEventListener('click', unlock);
+            };
+            document.addEventListener('click', unlock);
+          });
 
+          // Hide after 8 seconds
+          setTimeout(() => {
+            splash.classList.add('hide');
+            setTimeout(() => {
+              splash.classList.remove('show');
+            }, 1000);
+            audio.pause();
+          }, 8000);
+        }
+      }
+
+      window.onload = showBirthdaySplash;
+    </script>
   </body>
 </html>
-
