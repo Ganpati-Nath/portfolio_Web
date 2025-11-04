@@ -430,6 +430,9 @@
     <script type="module" src="/src/main.jsx"></script>
 
     <script>
+      let birthdayAudio = null;
+      let isAudioPlaying = false;
+
       function createConfetti(splash) {
         const shapes = ['square', 'circle', 'ribbon'];
         const colors = [
@@ -487,40 +490,90 @@
         }
       }
 
+      async function playBirthdayMusic() {
+        try {
+          // Preload the audio
+          birthdayAudio = new Audio('/happy.mp3');
+          birthdayAudio.volume = 0.5;
+          birthdayAudio.preload = 'auto';
+          
+          // Wait for user interaction simulation via splash visibility
+          await new Promise(resolve => {
+            const checkAudioContext = () => {
+              if (document.hidden || !document.getElementById('birthdaySplash').classList.contains('show')) {
+                setTimeout(checkAudioContext, 100);
+                return;
+              }
+              resolve();
+            };
+            checkAudioContext();
+          });
+
+          // Play with multiple retry attempts
+          const playPromise = birthdayAudio.play();
+          if (playPromise !== undefined) {
+            try {
+              await playPromise;
+              isAudioPlaying = true;
+              console.log('Birthday music started successfully');
+            } catch (error) {
+              console.log('Direct autoplay failed, trying fallback...');
+              // Fallback: Mute first, then unmute after a short delay
+              birthdayAudio.muted = true;
+              await birthdayAudio.play();
+              setTimeout(() => {
+                birthdayAudio.muted = false;
+                birthdayAudio.volume = 0.5;
+                isAudioPlaying = true;
+                console.log('Birthday music started via fallback');
+              }, 100);
+            }
+          }
+        } catch (error) {
+          console.log('Audio initialization failed:', error);
+        }
+      }
+
+      function stopBirthdayMusic() {
+        if (birthdayAudio && isAudioPlaying) {
+          birthdayAudio.pause();
+          birthdayAudio.currentTime = 0;
+          isAudioPlaying = false;
+          console.log('Birthday music stopped');
+        }
+      }
+
       function showBirthdaySplash() {
         const today = new Date();
         const day = today.getDate();
         const month = today.getMonth();
 
         // For testing: Always show (remove condition to test)
-        // Remove the if condition below and uncomment the next line for testing
-        // if (true) {
         if (day === 4 && month === 10) {
           const splash = document.getElementById('birthdaySplash');
           splash.classList.add('show');
 
-          // Create confetti
+          // Start visual effects
           createConfetti(splash);
-
-          // Create continuous sparkles
+          
           const sparkleInterval = setInterval(() => createSparkles(splash), 100);
-
-          // Create random fireworks
           const fireworkInterval = setInterval(() => {
             const x = Math.random() * window.innerWidth;
             const y = Math.random() * window.innerHeight;
             createFirework(splash, x, y);
           }, 800);
 
-          // Play birthday music
-          const audio = new Audio('/happy.mp3');
-          audio.volume = 0.5;
-          audio.play().catch(() => console.log('Audio autoplay prevented'));
+          // Start music playback
+          playBirthdayMusic();
 
           // Hide splash after 6 seconds
           setTimeout(() => {
             clearInterval(sparkleInterval);
             clearInterval(fireworkInterval);
+            
+            // Stop music when splash starts hiding
+            stopBirthdayMusic();
+            
             splash.classList.add('hide');
             setTimeout(() => {
               splash.classList.remove('show');
@@ -529,6 +582,10 @@
           }, 6000);
         }
       }
+
+      // Ensure music stops if page is refreshed or navigated away
+      window.addEventListener('beforeunload', stopBirthdayMusic);
+      window.addEventListener('pagehide', stopBirthdayMusic);
 
       window.onload = showBirthdaySplash;
     </script>
