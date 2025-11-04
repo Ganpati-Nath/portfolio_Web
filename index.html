@@ -1174,7 +1174,7 @@
             clearInterval(particleInterval);
             splash.classList.add('hide');
             setTimeout(() => {
-              splash.classList.remove('show');
+              splash.classList.remove('show', 'hide');
               splash.style.display = 'none';
             }, 1200);
           }, 7000);
