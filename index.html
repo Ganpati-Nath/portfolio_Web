@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,97 +7,422 @@
     <title>PRATEEK PANDEY</title>
 
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
         margin: 0;
         overflow-x: hidden;
+        font-family: 'Poppins', sans-serif;
       }
 
       .splash {
         display: none;
         position: fixed;
         inset: 0;
-        background: radial-gradient(circle at top left, #ff758c, #ff7eb3, #fad0c4);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
         color: white;
         text-align: center;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        font-size: 3em;
-        font-weight: 700;
-        letter-spacing: 2px;
-        perspective: 1000px;
         z-index: 9999;
         overflow: hidden;
+        perspective: 1200px;
+      }
+
+      @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
       }
 
       .splash.show {
         display: flex;
-        animation: fadeIn 1s ease-out forwards;
+        animation: splashFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
 
       .splash.hide {
-        animation: fadeOut 1s ease-in forwards;
+        animation: splashFadeOut 1s cubic-bezier(0.6, 0, 0.8, 0.2) forwards;
       }
 
-      @keyframes fadeIn {
-        from { opacity: 0; transform: scale(0.8) rotateY(-10deg); }
-        to { opacity: 1; transform: scale(1) rotateY(0deg); }
+      @keyframes splashFadeIn {
+        from { 
+          opacity: 0; 
+          transform: scale(0.8) translateZ(-100px);
+          filter: blur(10px);
+        }
+        to { 
+          opacity: 1; 
+          transform: scale(1) translateZ(0);
+          filter: blur(0);
+        }
       }
 
-      @keyframes fadeOut {
-        from { opacity: 1; transform: scale(1); }
-        to { opacity: 0; transform: scale(0.8); }
+      @keyframes splashFadeOut {
+        from { 
+          opacity: 1; 
+          transform: scale(1) translateY(0);
+        }
+        to { 
+          opacity: 0; 
+          transform: scale(1.1) translateY(-50px);
+          filter: blur(20px);
+        }
+      }
+
+      /* Animated background elements */
+      .bg-shapes {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .shape {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(40px);
+        opacity: 0.3;
+        animation: float linear infinite;
+      }
+
+      .shape:nth-child(1) {
+        width: 300px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.3);
+        top: -150px;
+        left: -150px;
+        animation-duration: 20s;
+      }
+
+      .shape:nth-child(2) {
+        width: 250px;
+        height: 250px;
+        background: rgba(255, 182, 193, 0.4);
+        bottom: -125px;
+        right: -125px;
+        animation-duration: 25s;
+        animation-delay: -5s;
+      }
+
+      .shape:nth-child(3) {
+        width: 200px;
+        height: 200px;
+        background: rgba(173, 216, 230, 0.4);
+        top: 50%;
+        left: -100px;
+        animation-duration: 30s;
+        animation-delay: -10s;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translate(0, 0) rotate(0deg); }
+        25% { transform: translate(100px, 100px) rotate(90deg); }
+        50% { transform: translate(200px, -50px) rotate(180deg); }
+        75% { transform: translate(50px, 150px) rotate(270deg); }
+      }
+
+      /* Content container */
+      .splash-content {
+        position: relative;
+        z-index: 2;
+        transform-style: preserve-3d;
+      }
+
+      /* Profile image container with 3D effects */
+      .profile-container {
+        position: relative;
+        margin-bottom: 40px;
+        transform-style: preserve-3d;
+        animation: floatProfile 3s ease-in-out infinite;
+      }
+
+      @keyframes floatProfile {
+        0%, 100% { transform: translateY(0) rotateY(0deg); }
+        50% { transform: translateY(-20px) rotateY(15deg); }
+      }
+
+      .profile-glow {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: pulse 2s ease-in-out infinite;
+        filter: blur(20px);
+      }
+
+      @keyframes pulse {
+        0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+        50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+      }
+
+      .profile-ring {
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: rotate 4s linear infinite;
+      }
+
+      .profile-ring::before {
+        content: '';
+        position: absolute;
+        top: -3px;
+        left: 50%;
+        width: 6px;
+        height: 6px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+      }
+
+      @keyframes rotate {
+        from { transform: translate(-50%, -50%) rotate(0deg); }
+        to { transform: translate(-50%, -50%) rotate(360deg); }
       }
 
       .splash img {
-        width: 120px;
-        height: 120px;
+        position: relative;
+        width: 150px;
+        height: 150px;
         border-radius: 50%;
-        box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
-        transform: rotateY(360deg);
-        animation: spin 4s ease-in-out infinite alternate;
-        margin-bottom: 20px;
+        border: 5px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 
+          0 0 60px rgba(255, 255, 255, 0.4),
+          0 20px 40px rgba(0, 0, 0, 0.3),
+          inset 0 0 20px rgba(255, 255, 255, 0.2);
+        object-fit: cover;
+        animation: imageGlow 2s ease-in-out infinite alternate;
+        transform: translateZ(50px);
+        z-index: 2;
       }
 
-      @keyframes spin {
-        0% { transform: rotateY(0deg); }
-        100% { transform: rotateY(360deg); }
+      @keyframes imageGlow {
+        from { 
+          box-shadow: 
+            0 0 60px rgba(255, 255, 255, 0.4),
+            0 20px 40px rgba(0, 0, 0, 0.3),
+            inset 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        to { 
+          box-shadow: 
+            0 0 80px rgba(255, 255, 255, 0.6),
+            0 25px 50px rgba(0, 0, 0, 0.4),
+            inset 0 0 30px rgba(255, 255, 255, 0.3);
+        }
       }
 
+      /* Text styling with 3D effects */
       .splash h1 {
-        font-family: 'Poppins', sans-serif;
-        font-size: 2.5rem;
-        text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.3);
-        animation: glow 2s ease-in-out infinite alternate;
+        font-size: clamp(2rem, 6vw, 3.5rem);
+        font-weight: 800;
+        background: linear-gradient(135deg, #fff 0%, #f0f0f0 50%, #fff 100%);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 
+          2px 2px 4px rgba(0, 0, 0, 0.3),
+          4px 4px 8px rgba(0, 0, 0, 0.2);
+        animation: textShine 3s ease-in-out infinite, textFloat 3s ease-in-out infinite;
+        margin: 0 20px;
+        letter-spacing: 2px;
+        transform: translateZ(30px);
       }
 
-      @keyframes glow {
-        from { text-shadow: 0 0 10px #fff, 0 0 20px #ff9a9e; }
-        to { text-shadow: 0 0 20px #fff, 0 0 40px #ff758c; }
+      @keyframes textShine {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
       }
 
-      /* 🎉 Confetti effect */
+      @keyframes textFloat {
+        0%, 100% { transform: translateZ(30px) translateY(0); }
+        50% { transform: translateZ(30px) translateY(-10px); }
+      }
+
+      .splash .emoji {
+        display: inline-block;
+        animation: bounce 1s ease-in-out infinite;
+        font-size: 1.2em;
+      }
+
+      .splash .emoji:first-child {
+        animation-delay: 0s;
+      }
+
+      .splash .emoji:last-child {
+        animation-delay: 0.2s;
+      }
+
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+        25% { transform: translateY(-15px) rotate(-10deg) scale(1.1); }
+        75% { transform: translateY(-5px) rotate(10deg) scale(1.05); }
+      }
+
+      /* Subtitle */
+      .splash .subtitle {
+        font-size: clamp(1rem, 3vw, 1.5rem);
+        font-weight: 600;
+        margin-top: 20px;
+        opacity: 0;
+        animation: fadeInUp 1s ease-out 0.5s forwards;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        letter-spacing: 1px;
+      }
+
+      @keyframes fadeInUp {
+        from { 
+          opacity: 0; 
+          transform: translateY(30px);
+        }
+        to { 
+          opacity: 1; 
+          transform: translateY(0);
+        }
+      }
+
+      /* Enhanced confetti with 3D effects */
       .confetti {
         position: absolute;
         width: 10px;
         height: 10px;
-        background-color: white;
         top: -10px;
-        opacity: 0.8;
-        animation: fall linear forwards;
+        opacity: 1;
+        animation: confettiFall linear forwards;
+        z-index: 10;
+        transform-style: preserve-3d;
       }
 
-      @keyframes fall {
-        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-        100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+      .confetti.square {
+        border-radius: 2px;
+      }
+
+      .confetti.circle {
+        border-radius: 50%;
+      }
+
+      .confetti.ribbon {
+        width: 5px;
+        height: 15px;
+        border-radius: 3px;
+      }
+
+      @keyframes confettiFall {
+        0% { 
+          transform: translateY(0) rotate(0deg) translateZ(0);
+          opacity: 1; 
+        }
+        100% { 
+          transform: translateY(110vh) rotate(720deg) translateZ(100px);
+          opacity: 0; 
+        }
+      }
+
+      /* Sparkle particles */
+      .sparkle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        animation: sparkleAnim linear forwards;
+        pointer-events: none;
+      }
+
+      @keyframes sparkleAnim {
+        0% {
+          opacity: 0;
+          transform: scale(0) translateY(0);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1) translateY(-50px);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0) translateY(-100px);
+        }
+      }
+
+      /* Firework effect */
+      .firework {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        animation: fireworkAnim 1s ease-out forwards;
+      }
+
+      @keyframes fireworkAnim {
+        0% {
+          opacity: 1;
+          transform: translate(0, 0);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(var(--x), var(--y));
+        }
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .splash img {
+          width: 120px;
+          height: 120px;
+        }
+
+        .profile-ring {
+          width: 150px;
+          height: 150px;
+        }
+
+        .profile-glow {
+          width: 170px;
+          height: 170px;
+        }
       }
     </style>
   </head>
 
   <body>
     <div id="birthdaySplash" class="splash">
-      <img src="./src/assets/profile2.png" alt="Profile" />
-      <h1>🎉 Happy Birthday PRATEEK 🎉</h1>
+      <div class="bg-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+      </div>
+
+      <div class="splash-content">
+        <div class="profile-container">
+          <div class="profile-glow"></div>
+          <div class="profile-ring"></div>
+          <img src="./src/assets/profile2.png" alt="Prateek Pandey" />
+        </div>
+        <h1>
+          <span class="emoji">🎉</span>
+          Happy Birthday PRATEEK
+          <span class="emoji">🎉</span>
+        </h1>
+        <div class="subtitle">Wishing you an amazing year ahead! ✨</div>
+      </div>
     </div>
 
     <div id="root"></div>
@@ -104,38 +430,103 @@
     <script type="module" src="/src/main.jsx"></script>
 
     <script>
+      function createConfetti(splash) {
+        const shapes = ['square', 'circle', 'ribbon'];
+        const colors = [
+          '#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', 
+          '#f0932b', '#eb4d4b', '#6c5ce7', '#a29bfe',
+          '#fd79a8', '#fdcb6e', '#00b894', '#e17055'
+        ];
+
+        for (let i = 0; i < 150; i++) {
+          setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti', shapes[Math.floor(Math.random() * shapes.length)]);
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+            splash.appendChild(confetti);
+
+            setTimeout(() => confetti.remove(), 6000);
+          }, i * 30);
+        }
+      }
+
+      function createSparkles(splash) {
+        setInterval(() => {
+          const sparkle = document.createElement('div');
+          sparkle.classList.add('sparkle');
+          sparkle.style.left = (Math.random() * 100) + '%';
+          sparkle.style.top = (Math.random() * 100) + '%';
+          sparkle.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
+          splash.appendChild(sparkle);
+
+          setTimeout(() => sparkle.remove(), 1500);
+        }, 200);
+      }
+
+      function createFirework(splash, x, y) {
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b'];
+        const particles = 30;
+
+        for (let i = 0; i < particles; i++) {
+          const firework = document.createElement('div');
+          firework.classList.add('firework');
+          const angle = (Math.PI * 2 * i) / particles;
+          const velocity = 50 + Math.random() * 50;
+          
+          firework.style.left = x + 'px';
+          firework.style.top = y + 'px';
+          firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          firework.style.setProperty('--x', Math.cos(angle) * velocity + 'px');
+          firework.style.setProperty('--y', Math.sin(angle) * velocity + 'px');
+          
+          splash.appendChild(firework);
+          setTimeout(() => firework.remove(), 1000);
+        }
+      }
+
       function showBirthdaySplash() {
         const today = new Date();
         const day = today.getDate();
         const month = today.getMonth();
 
+        // For testing: Always show (remove condition to test)
+        // Remove the if condition below and uncomment the next line for testing
+        // if (true) {
         if (day === 4 && month === 10) {
           const splash = document.getElementById('birthdaySplash');
           splash.classList.add('show');
 
-          // 🎊 Add confetti dynamically
-          for (let i = 0; i < 100; i++) {
-            const confetti = document.createElement('div');
-            confetti.classList.add('confetti');
-            confetti.style.left = Math.random() * 100 + 'vw';
-            confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
-            confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
-            splash.appendChild(confetti);
+          // Create confetti
+          createConfetti(splash);
 
-            setTimeout(() => confetti.remove(), 5000);
-          }
+          // Create continuous sparkles
+          const sparkleInterval = setInterval(() => createSparkles(splash), 100);
 
-          // 🎵 Optional: background music auto-play
+          // Create random fireworks
+          const fireworkInterval = setInterval(() => {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            createFirework(splash, x, y);
+          }, 800);
+
+          // Play birthday music
           const audio = new Audio('./src/assets/hbd.mp3');
-          audio.autoplay = true;
-          audio.loop = false;
-          audio.volume = 0.6;
-          audio.play().catch(() => {});
+          audio.volume = 0.5;
+          audio.play().catch(() => console.log('Audio autoplay prevented'));
 
+          // Hide splash after 6 seconds
           setTimeout(() => {
+            clearInterval(sparkleInterval);
+            clearInterval(fireworkInterval);
             splash.classList.add('hide');
-            setTimeout(() => splash.classList.remove('show'), 1000);
-          }, 5000);
+            setTimeout(() => {
+              splash.classList.remove('show');
+              splash.style.display = 'none';
+            }, 1000);
+          }, 6000);
         }
       }
 
